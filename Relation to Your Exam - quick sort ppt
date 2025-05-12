@@ -1,0 +1,44 @@
+# Question 2
+
+import time
+
+def gcd_naive(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+# Measure execution time
+start_time = time.time()
+gcd_naive(20, 50)
+end_time = time.time()
+print("Naive GCD Execution Time: ", (end_time - start_time) * 1e6, " microseconds")
+
+
+# Question 1
+import matplotlib.pyplot as plt
+import random
+import time
+
+input_sizes = [10**2, 10**3, 10**4, 10**5, 10**6]
+naive_times = []
+euclidean_times = []
+
+for size in input_sizes:
+    a, b = random.randint(1, size), random.randint(1, size)
+    
+    # Timing Naive GCD
+    start = time.time()
+    gcd_naive(a, b)
+    naive_times.append((time.time() - start) * 1e6)
+    
+    # Timing Euclidean GCD
+    start = time.time()
+    gcd_euclidean(a, b)
+    euclidean_times.append((time.time() - start) * 1e6)
+
+plt.loglog(input_sizes, naive_times, label="Naive", basex=10, basey=10)
+plt.loglog(input_sizes, euclidean_times, label="Euclidean", basex=10, basey=10)
+plt.xlabel("Input size")
+plt.ylabel("Execution time (microseconds)")
+plt.legend()
+plt.show()
