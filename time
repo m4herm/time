@@ -1,0 +1,73 @@
+import time
+import math
+
+# Method 1: Divisors Method
+def divisors_method(a, b):
+    divisors_a = {i for i in range(1, a+1) if a % i == 0}
+    divisors_b = {i for i in range(1, b+1) if b % i == 0}
+    return max(divisors_a & divisors_b)
+
+# Method 2: Euclidean Algorithm
+def euclidean_algorithm(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+# Method 3: Stein's Algorithm (Binary GCD)
+def stein_algorithm(a, b):
+    if a == b: return a
+    if a == 0: return b
+    if b == 0: return a
+    if a % 2 == 0 and b % 2 == 0: return 2 * stein_algorithm(a // 2, b // 2)
+    if a % 2 == 0: return stein_algorithm(a // 2, b)
+    if b % 2 == 0: return stein_algorithm(a, b // 2)
+    if a >= b: return stein_algorithm(a - b, b)
+    return stein_algorithm(a, b - a)
+
+# Method 4: Naive Method
+def naive_method(a, b):
+    min_value = min(a, b)
+    for i in range(min_value, 0, -1):
+        if a % i == 0 and b % i == 0:
+            return i
+
+# Method 5: Prime Factorization Method
+def prime_factors(n):
+    i = 2
+    factors = []
+    while i * i <= n:
+        while (n % i) == 0:
+            factors.append(i)
+            n //= i
+        i += 1
+    if n > 1:
+        factors.append(n)
+    return factors
+
+def prime_factorization_method(a, b):
+    factors_a = set(prime_factors(a))
+    factors_b = set(prime_factors(b))
+    return max(factors_a & factors_b)
+
+# Function to run the GCD methods
+def gcd_analyzer(a, b):
+    methods = [divisors_method, euclidean_algorithm, stein_algorithm, naive_method, prime_factorization_method]
+    results = {}
+
+    for method in methods:
+        start = time.time()
+        gcd = method(a, b)
+        end = time.time()
+        elapsed_time = (end - start) * 1e6  # Convert to microseconds
+        results[method.__name__] = {'GCD': gcd, 'Time (microseconds)': elapsed_time}
+
+    # Automatically detect the fastest algorithm
+    fastest = min(results, key=lambda x: results[x]['Time (microseconds)'])
+    results['Fastest Algorithm'] = fastest
+
+    return results
+
+# Example usage
+a, b = 36, 60
+result = gcd_analyzer(a, b)
+print(result)
