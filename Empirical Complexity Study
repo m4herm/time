@@ -1,0 +1,28 @@
+import random
+import matplotlib.pyplot as plt
+
+def plot_time_complexity():
+    sizes = [10**i for i in range(2, 8)]  # 10^2 to 10^7
+    times_naive = []
+    times_euclidean = []
+
+    for size in sizes:
+        a = random.randint(10**4, size)
+        b = random.randint(10**4, size)
+        start = time.time()
+        naive_method(a, b)
+        times_naive.append((time.time() - start) * 1e6)  # microseconds
+
+        start = time.time()
+        euclidean_algorithm(a, b)
+        times_euclidean.append((time.time() - start) * 1e6)
+
+    plt.loglog(sizes, times_naive, label="Naive Method")
+    plt.loglog(sizes, times_euclidean, label="Euclidean Algorithm")
+    plt.xlabel('Input size (log scale)')
+    plt.ylabel('Time (microseconds, log scale)')
+    plt.legend()
+    plt.title('GCD Algorithm Time Complexity')
+    plt.show()
+
+plot_time_complexity()
